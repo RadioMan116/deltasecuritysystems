@@ -3,6 +3,7 @@ import './App.scss';
 import Home from './pages/Home/Home';
 import CharacterDetail from './pages/Card/[id]';
 import MainLayout from './layout/MainLayout';
+import NotFound from './pages/404/404';
 
 function App() {
 	return (
@@ -20,6 +21,10 @@ function App() {
 						<Route
 							path='/characters/:id'
 							element={<CharacterDetail />}
+						/>
+						<Route
+							path='/404'
+							element={<NotFound />}
 						/>
 					</Route>
 				</Routes>

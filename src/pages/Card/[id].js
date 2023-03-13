@@ -14,7 +14,7 @@ const CharacterDetail = () => {
 				setCharacter(response.data);
 			})
 			.catch(error => {
-				console.log(error);
+				navigate('/404');
 			});
 	}, [id]);
 
