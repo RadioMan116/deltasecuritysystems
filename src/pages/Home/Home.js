@@ -51,21 +51,16 @@ const Home = () => {
 			.catch(error => console.log(error));
 	}, []);
 
+	const handleSearch = term => {
+		setState(prevState => ({ ...prevState, searchTerm: term }));
+	};
+
 	const filteredCharacters = characters.filter(
 		({ name, species, status }) =>
 			name.toLowerCase().includes(searchTerm.toLowerCase()) &&
 			(activeSpeciesCategory === 'All' || activeSpeciesCategory === species) &&
 			(activeStatusCategory === 'All' || activeStatusCategory === status),
 	);
-
-	const handleParamClick = param => {
-		setState(prevState => ({
-			...prevState,
-			characters: characters.filter(
-				character => character[param] === prevState[param],
-			),
-		}));
-	};
 
 	const handleSetActiveSpeciesCategory = categoryName => {
 		setState(prevState => ({
@@ -83,11 +78,7 @@ const Home = () => {
 
 	return (
 		<div className={styles.home}>
-			<Search
-				setSearchTerm={term =>
-					setState(prevState => ({ ...prevState, searchTerm: term }))
-				}
-			/>
+			<Search onSearch={handleSearch} />
 			<div className={styles.content}>
 				<div className={styles.items}>
 					<Category
@@ -109,12 +100,13 @@ const Home = () => {
 							<CharacterCard
 								key={character.id}
 								character={character}
-								onParamClick={handleParamClick}
+								setActiveSpecies={handleSetActiveSpeciesCategory}
+								setActiveStatus={handleSetActiveStatusCategory}
 							/>
 						))}
 					</div>
 				) : (
-					<p className={styles.noResults}>No results found.</p>
+					<p className={styles.noResults}>Ничего не найдено.</p>
 				)}
 			</div>
 		</div>

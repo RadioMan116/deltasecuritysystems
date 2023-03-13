@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './CharacterCard.scss';
 
-const CharacterCard = ({ character, onParamClick }) => {
+const CharacterCard = ({ character, setActiveSpecies, setActiveStatus }) => {
 	const { id, name, image, status, species } = character;
-	const handleClick = param => {
-		onParamClick(param);
-	};
 
 	return (
 		<div className={styles.card}>
@@ -31,13 +28,13 @@ const CharacterCard = ({ character, onParamClick }) => {
 				<div className={styles.params}>
 					<p
 						className={styles.param}
-						onClick={() => handleClick('species')}
+						onClick={() => setActiveSpecies(species)}
 					>
 						{species}
 					</p>
 					<p
 						className={styles.param}
-						onClick={() => handleClick('status')}
+						onClick={() => setActiveStatus(status)}
 					>
 						{status}
 					</p>
