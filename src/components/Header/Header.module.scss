@@ -1,0 +1,32 @@
+.header {
+	width: 100%;
+	height: 100px;
+	position: relative;
+	background: #9ecfcd;
+
+	img {
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	.container {
+		max-width: 780px;
+		display: flex;
+		align-items: center;
+		height: 100%;
+		margin: 0 auto;
+	}
+
+	.logo {
+		width: 45px;
+		height: 45px;
+	}
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
