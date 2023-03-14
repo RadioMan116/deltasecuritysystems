@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import styles from './Pagination.module.scss';
 
 const Pagination = ({ totalItems, currentPage, paginate }) => {
