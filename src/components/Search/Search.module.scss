@@ -6,13 +6,18 @@
 	width: 100%;
 	max-width: 480px;
 	height: 31px;
-	border: 1px solid #e2e2e2;
-	font-family: 'Inter';
+	border: 2px solid #45ecad;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 12px;
 	line-height: 15px;
-	color: #000000;
 	padding: 8px 11px;
 	box-sizing: border-box;
+	color: #000;
+
+	&:focus-visible {
+		outline:0;
+		background:#202329 ;
+		color: #ff79c6;
+	}
 }

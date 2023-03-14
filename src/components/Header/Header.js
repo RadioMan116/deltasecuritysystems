@@ -14,6 +14,7 @@ const Header = () => {
 						alt='Rick and Morty'
 					/>
 				</Link>
+				<h1 className={styles.title}>Rick and Morty</h1>
 			</div>
 			<img
 				className={styles.background}

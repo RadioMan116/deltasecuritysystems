@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import styles from './CharacterCard.scss';
-
+import styles from './CharacterCard.module.scss';
 const CharacterCard = ({ character, setActiveSpecies, setActiveStatus }) => {
-	const { id, name, image, status, species } = character;
+	const { id, name, image, status, species, gender } = character;
+
+	const imageSrc = useMemo(() => {
+		const img = new Image();
+		img.src = image;
+		return image;
+	}, [image]);
 
 	return (
 		<div className={styles.card}>
@@ -14,8 +19,9 @@ const CharacterCard = ({ character, setActiveSpecies, setActiveStatus }) => {
 			>
 				<img
 					className={styles.image}
-					src={image}
+					src={imageSrc}
 					alt={name}
+					loading='lazy'
 				/>
 			</Link>
 			<div className={styles.details}>
@@ -38,6 +44,7 @@ const CharacterCard = ({ character, setActiveSpecies, setActiveStatus }) => {
 					>
 						{status}
 					</p>
+					<p>{gender}</p>
 				</div>
 			</div>
 		</div>

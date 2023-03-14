@@ -12,6 +12,7 @@ const Search = ({ onSearch }) => {
 				type='text'
 				placeholder='Search characters by name'
 				onChange={handleChange}
+				className={styles.input}
 			/>
 		</div>
 	);

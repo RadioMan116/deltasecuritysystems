@@ -1,0 +1,42 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.characterCard {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+
+
+  h3 {
+    margin: 0;
+  }
+
+}
+.details {
+  background: #9ecfcd;
+  display: flex;
+  flex-direction: column;
+  padding:10px ;
+  flex-grow: 1;
+
+  .characterCard {
+    margin-bottom: auto;
+  }
+
+  .param {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+.characterCard ,.details .param {
+  color: #fff;
+
+  &:hover {
+    color: #e85355;
+    text-decoration: none;
+  }
+}
+

@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Search from '../../components/Search/Search';
 import styles from './Home.module.scss';
 import Category from '../../components/Category/Category';
 import apiClient from '../../api/apiClientBase';
 import CharacterCard from '../../components/CharacterCard/CharacterCard';
+import Pagination from '../../components/Pagination/Pagination';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentPage, setTotalCount } from '../../store';
 
 const Home = () => {
-	const [
-		{
-			characters,
-			searchTerm,
-			speciesCategories,
-			activeSpeciesCategory,
-			statusCategories,
-			activeStatusCategory,
-		},
-		setState,
-	] = useState({
+	const [state, setState] = useState({
 		characters: [],
 		searchTerm: '',
 		speciesCategories: [],
@@ -24,57 +17,79 @@ const Home = () => {
 		statusCategories: [],
 		activeStatusCategory: '',
 	});
+	const dispatch = useDispatch();
+	const currentPage = useSelector(state => state.pagination.currentPage);
+	const totalCount = useSelector(state => state.pagination.totalCount);
 
 	useEffect(() => {
-		apiClient
-			.get('https://rickandmortyapi.com/api/character')
-			.then(response => {
+		const fetchCharacters = async () => {
+			try {
+				const url = `https://rickandmortyapi.com/api/character/?page=${currentPage}`;
+				const response = await apiClient.get(url);
+				const characters = response.data.results;
+				const count = response.data.info.pages;
+				const speciesCategories = [
+					'All',
+					...new Set(characters.map(character => character.species)),
+				];
+				const statusCategories = [
+					'All',
+					...new Set(characters.map(character => character.status)),
+				];
 				setState(prevState => ({
 					...prevState,
-					characters: response.data.results,
-					speciesCategories: [
-						'All',
-						...new Set(
-							response.data.results.map(character => character.species),
-						),
-					],
+					characters,
+					speciesCategories,
 					activeSpeciesCategory: 'All',
-					statusCategories: [
-						'All',
-						...new Set(
-							response.data.results.map(character => character.status),
-						),
-					],
+					statusCategories,
 					activeStatusCategory: 'All',
 				}));
-			})
-			.catch(error => console.log(error));
+				dispatch(setTotalCount(count));
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		fetchCharacters();
+	}, [currentPage, dispatch]);
+
+	const handleSearch = useCallback(term => {
+		setState(prevState => ({ ...prevState, searchTerm: term }));
 	}, []);
 
-	const handleSearch = term => {
-		setState(prevState => ({ ...prevState, searchTerm: term }));
-	};
+	const handleSetActiveCategory = useCallback((categoryName, categoryType) => {
+		setState(prevState => ({
+			...prevState,
+			[categoryType]: categoryName,
+		}));
+	}, []);
 
-	const filteredCharacters = characters.filter(
-		({ name, species, status }) =>
-			name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-			(activeSpeciesCategory === 'All' || activeSpeciesCategory === species) &&
-			(activeStatusCategory === 'All' || activeStatusCategory === status),
+	const {
+		characters,
+		searchTerm,
+		speciesCategories,
+		activeSpeciesCategory,
+		statusCategories,
+		activeStatusCategory,
+	} = state;
+
+	const filteredCharacters = useMemo(
+		() =>
+			characters.filter(
+				({ name, species, status }) =>
+					name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+					(activeSpeciesCategory === 'All' ||
+						activeSpeciesCategory === species) &&
+					(activeStatusCategory === 'All' || activeStatusCategory === status),
+			),
+		[characters, searchTerm, activeSpeciesCategory, activeStatusCategory],
 	);
 
-	const handleSetActiveSpeciesCategory = categoryName => {
-		setState(prevState => ({
-			...prevState,
-			activeSpeciesCategory: categoryName,
-		}));
-	};
-
-	const handleSetActiveStatusCategory = categoryName => {
-		setState(prevState => ({
-			...prevState,
-			activeStatusCategory: categoryName,
-		}));
-	};
+	const handlePaginate = useCallback(
+		pageNumber => {
+			dispatch(setCurrentPage(pageNumber));
+		},
+		[dispatch],
+	);
 
 	return (
 		<div className={styles.home}>
@@ -85,13 +100,17 @@ const Home = () => {
 						name={'Вид'}
 						categories={speciesCategories}
 						activeCategory={activeSpeciesCategory}
-						setActiveCategory={handleSetActiveSpeciesCategory}
+						setActiveCategory={name =>
+							handleSetActiveCategory(name, 'activeSpeciesCategory')
+						}
 					/>
 					<Category
 						name={'Статус'}
 						categories={statusCategories}
 						activeCategory={activeStatusCategory}
-						setActiveCategory={handleSetActiveStatusCategory}
+						setActiveCategory={name =>
+							handleSetActiveCategory(name, 'activeStatusCategory')
+						}
 					/>
 				</div>
 				{filteredCharacters.length > 0 ? (
@@ -100,8 +119,12 @@ const Home = () => {
 							<CharacterCard
 								key={character.id}
 								character={character}
-								setActiveSpecies={handleSetActiveSpeciesCategory}
-								setActiveStatus={handleSetActiveStatusCategory}
+								setActiveSpecies={name =>
+									handleSetActiveCategory(name, 'activeSpeciesCategory')
+								}
+								setActiveStatus={name =>
+									handleSetActiveCategory(name, 'activeStatusCategory')
+								}
 							/>
 						))}
 					</div>
@@ -109,6 +132,11 @@ const Home = () => {
 					<p className={styles.noResults}>Ничего не найдено.</p>
 				)}
 			</div>
+			<Pagination
+				totalItems={totalCount}
+				paginate={handlePaginate}
+				currentPage={currentPage}
+			/>
 		</div>
 	);
 };
