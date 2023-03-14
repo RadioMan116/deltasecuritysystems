@@ -14,6 +14,9 @@
 	height: 40px;
 	&.prev,
 	&.next {
+		&[disabled] {
+			display: none;
+		}
 		width: auto;
 	}
 
@@ -26,7 +29,7 @@
 
 	&.active {
 		&:before {
-			box-shadow:0 0 0 2px #45ecad;
+			box-shadow: 0 0 0 2px #45ecad;
 			margin: 2px;
 			border-radius: 2px;
 			top: -1px;
