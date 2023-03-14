@@ -112,6 +112,18 @@ const Home = () => {
 							handleSetActiveCategory(name, 'activeStatusCategory')
 						}
 					/>
+					<button
+						className={styles.reset}
+						onClick={() => {
+							setState(prevState => ({
+								...prevState,
+								activeSpeciesCategory: 'All',
+								activeStatusCategory: 'All',
+							}));
+						}}
+					>
+						Очистить фильтры
+					</button>
 				</div>
 				{filteredCharacters.length > 0 ? (
 					<div className={styles.characters}>

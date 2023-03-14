@@ -18,3 +18,16 @@
 	grid-template-columns: repeat(4, 1fr);
 	grid-gap: 20px;
 }
+
+.reset {
+	background: #9ecfcd;
+	border: 0;
+	height: 30px;
+	cursor: pointer;
+	color: #fff;
+
+	&:hover {
+		color: #e85355;
+		text-decoration: none;
+	}
+}

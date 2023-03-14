@@ -4,9 +4,13 @@
   padding:10px 9px;
   overflow: hidden;
   border-radius: 0.5rem;
-  &:not(:last-of-type) {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
+  //&:not(:last-of-type) {
 
+  //}
+
+  &:last-of-type {
+    margin-bottom: 20px;
   }
 
   p {
