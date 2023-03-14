@@ -16,7 +16,7 @@ const CharacterDetail = () => {
 			.catch(error => {
 				navigate('/404');
 			});
-	}, [id]);
+	}, [id, navigate]);
 
 	if (!character) {
 		return <div>Loading...</div>;
